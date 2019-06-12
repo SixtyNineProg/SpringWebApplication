@@ -1,8 +1,8 @@
 spring:
-  application.name: demo-project
+  application.name: user-project
   profiles.active: local
 
-spring.data.mongodb.uri: ${MONGO_URI:mongodb://localhost:27017/user}
+spring.data.mongodb.uri: ${MONGO_URI:mongodb://localhost:27017/webapplication}
 
 ---
 spring:
@@ -10,4 +10,4 @@ spring:
 
 server:
   port: 9000
-  servlet.context-path: /user
+  servlet.context-path: /webapplication
