@@ -5,6 +5,7 @@ import by.clevertec.WebApplication.repository.UserRepository;
 import by.clevertec.WebApplication.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,4 +33,11 @@ public class UserServiceImpl implements UserService<User> {
     public Optional<User> getUser(String id) {
         return userRepository.findById(id);
     }
+
+    @Override
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
+
 }
