@@ -18,13 +18,13 @@ public class UserServiceImpl implements UserService<User> {
     }
 
     @Override
-    public String save(User user) {
+    public String saveUser(User user) {
         userRepository.save(user);
         return user.getId();
     }
 
     @Override
-    public Boolean delete(String id) {
+    public Boolean deleteUser(String id) {
         userRepository.deleteById(id);
         return true;
     }
@@ -35,9 +35,14 @@ public class UserServiceImpl implements UserService<User> {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    @Override
+    public Boolean updateUser(User user) {
+        userRepository.save(user);
+        return true;
+    }
 
 }

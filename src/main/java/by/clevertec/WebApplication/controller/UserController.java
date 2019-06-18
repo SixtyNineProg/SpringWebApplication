@@ -24,7 +24,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> saveUser(@RequestBody User user) {
         try {
-            return ResponseEntity.ok(userService.save(user));
+            return ResponseEntity.ok(userService.saveUser(user));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -34,7 +34,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable String id) {
         try {
-            return ResponseEntity.ok(userService.delete(id));
+            return ResponseEntity.ok(userService.deleteUser(id));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -55,7 +55,18 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> getAll() {
         try {
-            return ResponseEntity.ok(userService.getAll());
+            return ResponseEntity.ok(userService.getAllUsers());
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(path = Constants.PATH_UPDATE,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        try {
+            return ResponseEntity.ok(userService.updateUser(user));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

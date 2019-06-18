@@ -15,6 +15,10 @@ Microservice for working with user
           "password": "123456789",
           "age": "12"
         }
+        
+#### POST [http://localhost:9000/webapplication/user/updateUser](http://localhost:9000/webapplication/user)
+#### User update
+        
 #### POST [http://localhost:9000/webapplication/user/{userId}](http://localhost:9000/webapplication/user/{userId})
 #### deleting user by id
 
