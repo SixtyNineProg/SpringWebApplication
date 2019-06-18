@@ -21,5 +21,11 @@ Microservice for working with user
         where:
         {userId} - identity number
 
+#### GET [http://localhost:9000/webapplication/user/{userId]
+#### getting user by id
+
+        where:
+        {userId} - identity number
+
 ###Build tool        
 This projec uses such build tool as gradle. Use "gradlew build" to build project

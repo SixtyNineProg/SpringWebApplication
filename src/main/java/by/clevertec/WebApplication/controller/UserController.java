@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping(Constants.USER)
 public class UserController {
@@ -35,6 +37,17 @@ public class UserController {
             return ResponseEntity.ok(userService.delete(id));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = Constants.ID_PATH_VARIABLE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> findUser(@PathVariable String id) {
+        Optional user = userService.getUser(id);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

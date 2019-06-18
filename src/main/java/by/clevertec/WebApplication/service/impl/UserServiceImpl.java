@@ -3,11 +3,12 @@ package by.clevertec.WebApplication.service.impl;
 import by.clevertec.WebApplication.dataSets.User;
 import by.clevertec.WebApplication.repository.UserRepository;
 import by.clevertec.WebApplication.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService<User> {
 
     private final UserRepository userRepository;
 
@@ -25,5 +26,10 @@ public class UserServiceImpl implements UserService {
     public Boolean delete(String id) {
         userRepository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public Optional<User> getUser(String id) {
+        return userRepository.findById(id);
     }
 }
