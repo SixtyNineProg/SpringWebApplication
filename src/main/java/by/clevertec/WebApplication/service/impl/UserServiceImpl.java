@@ -11,7 +11,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository, ObjectMapper objectMapper) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -19,5 +19,11 @@ public class UserServiceImpl implements UserService {
     public String save(User user) {
         userRepository.save(user);
         return user.getId();
+    }
+
+    @Override
+    public Boolean delete(String id) {
+        userRepository.deleteById(id);
+        return true;
     }
 }

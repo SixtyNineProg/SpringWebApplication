@@ -15,3 +15,11 @@ Microservice for working with user
           "password": "123456789",
           "age": "12"
         }
+#### POST [http://localhost:9000/webapplication/user/{userId]
+#### deleting user by id
+
+        where:
+        {userId} - identity number
+
+###Build tool        
+This projec uses such build tool as gradle. Use "gradlew build" to build project
