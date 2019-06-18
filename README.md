@@ -5,7 +5,7 @@ Microservice for working with user
 
 ## REST-services:
         
-#### POST [http://localhost:9000/WebApplication/user](http://localhost:9000/WebApplication/user)
+#### POST [http://localhost:9000/webapplication/user](http://localhost:9000/WebApplication/user)
 #### user registration
     
         Example of request body:
