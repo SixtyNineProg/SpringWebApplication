@@ -61,7 +61,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(path = Constants.PATH_UPDATE,
+    @PutMapping(path = Constants.PATH_UPDATE,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> updateUser(@RequestBody User user) {
