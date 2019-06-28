@@ -24,7 +24,12 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> saveUser(@RequestBody User user) {
         try {
-            return ResponseEntity.ok(userService.saveUser(user));
+            if (user.getName() != null &&
+                    user.getEmail() != null &&
+                    user.getPassword() != null &&
+                    user.getAge() != 0)
+                return ResponseEntity.ok(userService.saveUser(user));
+            else return new ResponseEntity<>("Incorrect data", HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -65,10 +70,11 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> updateUser(@RequestBody User user) {
-        try {
+        Optional<User> optionalUser = userService.getUser(user.getId());
+        if (optionalUser.isPresent()) {
             return ResponseEntity.ok(userService.updateUser(user));
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }
