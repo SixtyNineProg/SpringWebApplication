@@ -82,4 +82,17 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> getUser(
+            @RequestParam(name = Constants.PAGESIZE_KEY, defaultValue = Constants.PAGESIZE_VALUE, required = false)
+                    Integer pageSize,
+            @RequestParam(name = Constants.PAGENUMBER_KEY, defaultValue = Constants.PAGENUMBER_VALUE, required = false)
+                    Integer pageNumber) {
+        try {
+            return ResponseEntity.ok(userService.getUser(pageSize, pageNumber));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

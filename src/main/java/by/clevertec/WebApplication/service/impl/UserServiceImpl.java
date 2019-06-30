@@ -7,6 +7,8 @@ import by.clevertec.WebApplication.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +60,13 @@ public class UserServiceImpl implements UserService<User> {
         Optional<User> optionalUser = Optional.ofNullable(user);
         optionalUser.ifPresent(data -> log.info(Constants.USER_UPDATED, user.getId(), toJson(user)));
         return true;
+    }
+
+    @Override
+    public Page<User> getUser(Integer pageSize, Integer pageNumber) {
+        Page<User> users = userRepository.findAllByOrderByAge(PageRequest.of(pageNumber, pageSize));
+        log.info(Constants.USER_PAGEABLE, toJson(users));
+        return users;
     }
 
     private synchronized String toJson(Object o) {

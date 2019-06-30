@@ -16,23 +16,41 @@ Microservice for working with user
           "age": "12"
         }
         
+---
+
 ### PUT [http://localhost:9000/webapplication/user/updateUser](http://localhost:9000/webapplication/user)
 ##### User update
-        
+
+---
+      
 ### POST [http://localhost:9000/webapplication/user/{userId}](http://localhost:9000/webapplication/user/{userId})
 ##### deleting user by id
 
         where:
         {userId} - identity number
 
+---
+
 ### GET [http://localhost:9000/webapplication/user/{userId}](http://localhost:9000/webapplication/user/{userId})
 ##### getting user by id
 
         where:
         {userId} - identity number
+
+---
         
 ### GET [http://localhost:9000/webapplication/user/getAll](http://localhost:9000/webapplication/user/getAll)
 ##### getting all users
+
+---
+
+### GET [http://localhost:9000/webapplication/user?pagesize={pagesize}&pagenumber={pagenumber}](http://localhost:9000//webapplication/user?pagesize={pagesize}&pagenumber={pagenumber})
+##### receiving history
+
+        where:
+        {pagesize} - number of elements per page (optional parameter, default 5)
+        {pagenumber} - page number (optional parameter, default 1)
+
 
 ###Build tool        
 This projec uses such build tool as gradle. 
