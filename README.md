@@ -5,8 +5,8 @@ Microservice for working with user
 
 ## REST-services:
         
-#### POST [http://localhost:9000/webapplication/user](http://localhost:9000/webapplication/user)
-#### user registration
+### POST [http://localhost:9000/webapplication/user](http://localhost:9000/webapplication/user)
+##### user registration
     
         Example of request body:
         {
@@ -16,23 +16,23 @@ Microservice for working with user
           "age": "12"
         }
         
-#### POST [http://localhost:9000/webapplication/user/updateUser](http://localhost:9000/webapplication/user)
-#### User update
+### PUT [http://localhost:9000/webapplication/user/updateUser](http://localhost:9000/webapplication/user)
+##### User update
         
-#### POST [http://localhost:9000/webapplication/user/{userId}](http://localhost:9000/webapplication/user/{userId})
-#### deleting user by id
+### POST [http://localhost:9000/webapplication/user/{userId}](http://localhost:9000/webapplication/user/{userId})
+##### deleting user by id
 
         where:
         {userId} - identity number
 
-#### GET [http://localhost:9000/webapplication/user/{userId}](http://localhost:9000/webapplication/user/{userId})
-#### getting user by id
+### GET [http://localhost:9000/webapplication/user/{userId}](http://localhost:9000/webapplication/user/{userId})
+##### getting user by id
 
         where:
         {userId} - identity number
         
-#### GET [http://localhost:9000/webapplication/user/getAll](http://localhost:9000/webapplication/user/getAll)
-#### getting all users
+### GET [http://localhost:9000/webapplication/user/getAll](http://localhost:9000/webapplication/user/getAll)
+##### getting all users
 
 ###Build tool        
 This projec uses such build tool as gradle. 

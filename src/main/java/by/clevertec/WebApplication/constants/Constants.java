@@ -5,4 +5,10 @@ public class Constants {
     public static final String ID_PATH_VARIABLE = "/{id}";
     public static final String PATH_GET_ALL = "/getAll";
     public static final String PATH_UPDATE = "/updateUser";
+    public static final String ERROR_PARSING_OF_OBJECT = "can't represent object of class {} in json form for logging: {}";
+    public static final String USER_SAVED = "User saved successful : {}";
+    public static final String USER_RECEIVED = "User with id={} received successful : {}";
+    public static final String USER_DELETED = "User with id={} deleted successful";
+    public static final String USERS_RECEIVED = "All users with received successful";
+    public static final String USER_UPDATED = "User with id={} updated successful : {}";
 }

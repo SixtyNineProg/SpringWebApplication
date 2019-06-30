@@ -14,9 +14,9 @@ import java.util.Optional;
 @RequestMapping(Constants.USER)
 public class UserController {
 
-    private final UserService userService;
+    private final UserService<User> userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService<User> userService) {
         this.userService = userService;
     }
 
@@ -38,10 +38,15 @@ public class UserController {
     @PostMapping(value = Constants.ID_PATH_VARIABLE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable String id) {
-        try {
-            return ResponseEntity.ok(userService.deleteUser(id));
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        Optional optionalUser = userService.getUser(id);
+        if (optionalUser.isPresent()) {
+            try {
+                return ResponseEntity.ok(userService.deleteUser(id));
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -70,7 +75,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> updateUser(@RequestBody User user) {
-        Optional<User> optionalUser = userService.getUser(user.getId());
+        Optional optionalUser = userService.getUser(user.getId());
         if (optionalUser.isPresent()) {
             return ResponseEntity.ok(userService.updateUser(user));
         } else {
