@@ -35,7 +35,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = Constants.ID_PATH_VARIABLE,
+    @DeleteMapping(value = Constants.ID_PATH_VARIABLE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable String id) {
         Optional optionalUser = userService.getUser(id);

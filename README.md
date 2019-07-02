@@ -23,7 +23,7 @@ Microservice for working with user
 
 ---
       
-### POST [http://localhost:9000/webapplication/user/{userId}](http://localhost:9000/webapplication/user/{userId})
+### DELETE [http://localhost:9000/webapplication/user/{userId}](http://localhost:9000/webapplication/user/{userId})
 ##### deleting user by id
 
         where:

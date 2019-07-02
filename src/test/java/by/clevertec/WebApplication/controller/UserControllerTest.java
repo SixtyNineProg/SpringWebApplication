@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -33,21 +35,21 @@ public class UserControllerTest {
     @MockBean
     private UserService<User> userService;
 
-    private User user = new User(
+    private final User user = new User(
             "1",
             "Andrey",
             "Andrey@mail.ru",
             "123456789",
             18);
 
-    private User invalidUser = new User(
+    private final User invalidUser = new User(
             null,
             null,
             "Andrey@mail.ru",
             "123456789",
             18);
 
-    private List<User> users = Arrays.asList(
+    private final List<User> users = Arrays.asList(
             new User("1",
                     "Andrey",
                     "Andrey@mail.ru",
@@ -65,7 +67,9 @@ public class UserControllerTest {
                     10)
     );
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final Page<User> page = new PageImpl<>(users);
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void whenGetRequestThenExpectStatusOkAndContextJSON() throws Exception {
@@ -122,10 +126,10 @@ public class UserControllerTest {
     }
 
     @Test
-    public void whenPostRequestDeleteUserThenExpectStatusOkAndResponceTrue() throws Exception {
+    public void whenDeleteRequestDeleteUserThenExpectStatusOkAndResponceTrue() throws Exception {
         given(userService.getUser(anyString())).willReturn(java.util.Optional.of(user));
         given(this.userService.deleteUser(anyString())).willReturn(true);
-        MvcResult mvcResult = this.mockMvc.perform(post("/user/1"))
+        MvcResult mvcResult = this.mockMvc.perform(delete("/user/1"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -134,17 +138,17 @@ public class UserControllerTest {
     }
 
     @Test
-    public void whenPostRequestDeleteUserInvalidIdThenExpectStatusNotFound() throws Exception {
+    public void whenDeleteRequestDeleteUserInvalidIdThenExpectStatusNotFound() throws Exception {
         given(this.userService.deleteUser(anyString())).willReturn(true);
-        this.mockMvc.perform(post("/user/1"))
+        this.mockMvc.perform(delete("/user/1"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void whenPostRequestDeleteUserWithExceptionThenExpectStatusInternalServerError() throws Exception {
+    public void whenDeleteRequestDeleteUserWithExceptionThenExpectStatusInternalServerError() throws Exception {
         given(userService.getUser(anyString())).willReturn(java.util.Optional.of(user));
         given(this.userService.deleteUser(anyString())).willThrow(new ArithmeticException());
-        this.mockMvc.perform(post("/user/1"))
+        this.mockMvc.perform(delete("/user/1"))
                 .andExpect(status().is5xxServerError());
     }
 
@@ -171,7 +175,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void whenGetRequestGetAllWhithExceptionThenExpectStatusInternalServerError() throws Exception {
+    public void whenGetRequestGetAllWithExceptionThenExpectStatusInternalServerError() throws Exception {
         given(this.userService.getAllUsers()).willThrow(new ArithmeticException());
         this.mockMvc.perform(get("/user/getAll"))
                 .andExpect(status().is5xxServerError());
@@ -179,7 +183,7 @@ public class UserControllerTest {
 
     @Test
     public void whenPutRequestUpdateUserThenExpectStatusOk() throws Exception {
-        given(this.userService.getUser(user.getId())).willReturn(Optional.ofNullable(user));
+        given(this.userService.getUser(user.getId())).willReturn(Optional.of(user));
         given(this.userService.updateUser(user)).willReturn(true);
         this.mockMvc.perform(put("/user/updateUser")
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -197,5 +201,24 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    public void whenGetRequestPageableThenExpectTrueData() throws Exception {
+        given(this.userService.getUser(anyInt(), anyInt())).willReturn(page);
+        this.mockMvc.perform(get("/user?pagesize=3&pagenumber=0")
+                .param("pagenumber", "0")
+                .param("pagesize", "3"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].id").value(1))
+                .andExpect(jsonPath("$.content[2].id").value(3))
+                .andExpect(jsonPath("$.content[2].age").value(10))
+                .andReturn();
+    }
 
+    @Test
+    public void whenGetRequestPageableWithExceptionThenExpectStatusBadRequest() throws Exception {
+        given(this.userService.getUser(anyInt(), anyInt())).willThrow(new ArithmeticException());
+        this.mockMvc.perform(get("/user"))
+                .andExpect(status().is4xxClientError());
+    }
 }
