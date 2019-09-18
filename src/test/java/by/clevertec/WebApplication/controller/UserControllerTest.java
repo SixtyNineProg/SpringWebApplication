@@ -221,4 +221,11 @@ public class UserControllerTest {
         this.mockMvc.perform(get("/user"))
                 .andExpect(status().is4xxClientError());
     }
+
+    @Test
+    public void BadRequest() throws Exception {
+        given(this.userService.getUser(anyInt(), anyInt())).willThrow(new ArithmeticException());
+        this.mockMvc.perform(get("/user"))
+                .andExpect(status().is4xxClientError());
+    }
 }

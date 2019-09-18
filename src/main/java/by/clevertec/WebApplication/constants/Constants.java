@@ -15,7 +15,9 @@ public class Constants {
     public static final String USER_PAGEABLE = "User pageable received successful : {}";
 
     public static final String PAGESIZE_KEY = "pagesize";
-    public static final String PAGESIZE_VALUE = "5";
+    public static final String PAGESIZE_VALUE = "3";
     public static final String PAGENUMBER_KEY = "pagenumber";
     public static final String PAGENUMBER_VALUE = "0";
+
+    public static final int sizeCache = 10;
 }

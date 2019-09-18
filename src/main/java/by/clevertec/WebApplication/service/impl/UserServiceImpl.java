@@ -4,6 +4,7 @@ import by.clevertec.WebApplication.constants.Constants;
 import by.clevertec.WebApplication.dataSets.User;
 import by.clevertec.WebApplication.repository.UserRepository;
 import by.clevertec.WebApplication.service.UserService;
+import by.clevertec.WebApplication.сache.LRUCache;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ public class UserServiceImpl implements UserService<User> {
 
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
+    private LRUCache lruCache = new LRUCache();
 
     public UserServiceImpl(UserRepository userRepository, ObjectMapper objectMapper) {
         this.userRepository = userRepository;
@@ -42,9 +44,16 @@ public class UserServiceImpl implements UserService<User> {
 
     @Override
     public Optional<User> getUser(String id) {
-        Optional<User> user = userRepository.findById(id);
-        user.ifPresent(data -> log.info(Constants.USER_RECEIVED, id, toJson(user)));
-        return user;
+        Optional<User> cacheUser = lruCache.getCacheTable().get(id);
+        if (cacheUser.isPresent()) {
+            cacheUser.ifPresent(data -> log.info(Constants.USER_RECEIVED, id, toJson(cacheUser)));
+            return cacheUser;
+        } else {
+            Optional<User> user = userRepository.findById(id);
+            if (user.isPresent()) lruCache.addInCache(id, user);
+            user.ifPresent(data -> log.info(Constants.USER_RECEIVED, id, toJson(user)));
+            return user;
+        }
     }
 
     @Override
@@ -55,10 +64,10 @@ public class UserServiceImpl implements UserService<User> {
     }
 
     @Override
-    public Boolean updateUser(User user) {
-        userRepository.save(user);
-        Optional<User> optionalUser = Optional.ofNullable(user);
-        optionalUser.ifPresent(data -> log.info(Constants.USER_UPDATED, user.getId(), toJson(user)));
+    public Boolean updateUser(User cacheUser) {
+        userRepository.save(cacheUser);
+        Optional<User> optionalUser = Optional.ofNullable(cacheUser);
+        optionalUser.ifPresent(data -> log.info(Constants.USER_UPDATED, cacheUser.getId(), toJson(cacheUser)));
         return true;
     }
 

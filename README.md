@@ -21,6 +21,17 @@ Microservice for working with user
 ### PUT [http://localhost:9000/webapplication/user/updateUser](http://localhost:9000/webapplication/user)
 ##### User update
 
+        Example of request body:
+        {
+          "id": "{userId}",  
+          "name": "Dimasik",
+          "email": "dima@mail.ru",
+          "password": "123456789",
+          "age": "12"
+        }
+        
+        where:
+        {userId} - identity number
 ---
       
 ### DELETE [http://localhost:9000/webapplication/user/{userId}](http://localhost:9000/webapplication/user/{userId})
