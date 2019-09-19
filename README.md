@@ -10,6 +10,7 @@ Microservice for working with user
     
         Example of request body:
         {
+          "id": "1",
           "name": "Dima",
           "email": "dima@mail.ru",
           "password": "123456789",

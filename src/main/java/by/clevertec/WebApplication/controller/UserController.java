@@ -37,7 +37,7 @@ public class UserController {
 
     @DeleteMapping(value = Constants.ID_PATH_VARIABLE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         Optional optionalUser = userService.getUser(id);
         if (optionalUser.isPresent()) {
             try {
@@ -52,7 +52,7 @@ public class UserController {
 
     @GetMapping(value = Constants.ID_PATH_VARIABLE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> findUser(@PathVariable String id) {
+    public ResponseEntity<?> findUser(@PathVariable Integer id) {
         Optional user = userService.getUser(id);
         if (user.isPresent()) {
             return ResponseEntity.ok(user);

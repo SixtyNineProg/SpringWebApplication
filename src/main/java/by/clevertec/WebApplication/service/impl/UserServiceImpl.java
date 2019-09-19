@@ -29,25 +29,25 @@ public class UserServiceImpl implements UserService<User> {
     }
 
     @Override
-    public String saveUser(User user) {
+    public Integer saveUser(User user) {
         userRepository.save(user);
         log.info(Constants.USER_SAVED, toJson(user));
         return user.getId();
     }
 
     @Override
-    public Boolean deleteUser(String id) {
+    public Boolean deleteUser(Integer id) {
         userRepository.deleteById(id);
         log.info(Constants.USER_DELETED, id);
         return true;
     }
 
     @Override
-    public Optional<User> getUser(String id) {
+    public Optional<User> getUser(Integer id) {
         Optional<User> cacheUser = lruCache.getCacheTable().get(id);
         if (cacheUser != null) {
-            lruCache.replaceInPriorityQueue(id);
-            cacheUser.ifPresent(data -> log.info(Constants.USER_RECEIVED, id, toJson(cacheUser)));
+            lruCache.replaceInPriorityQueue(cacheUser);
+            cacheUser.ifPresent(data -> log.info(Constants.USER_RECEIVED_CACHE, id, toJson(cacheUser)));
             return cacheUser;
         } else {
             Optional<User> user = userRepository.findById(id);

@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService<User> {
-    String saveUser(User user);
-    Boolean deleteUser(String id);
-    Optional<User> getUser(String id);
+    Integer saveUser(User user);
+    Boolean deleteUser(Integer id);
+    Optional<User> getUser(Integer id);
     List<User> getAllUsers();
     Boolean updateUser(User user);
     Page<User> getUser(Integer pageSize, Integer pageNumber);

@@ -1,21 +1,17 @@
 spring:
-  application.name: user-project
-  profiles.active: local
-
-spring.data.mongodb.uri: ${MONGO_URI:mongodb://localhost:27017/webapplication}
-
----
-spring:
-  profiles: local
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/postgres
-#    username: postgres
-#    password: 123456789
-#    driver-class-name: org.postgresql.Driver
-#  jpa:
-#    show-sql: false
-#    hibernate:
-#    ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 123456789
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
 
 server:
   port: 9000

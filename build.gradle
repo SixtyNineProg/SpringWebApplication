@@ -27,12 +27,19 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	//implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	runtimeOnly 'org.postgresql:postgresql'
+	//implementation 'org.postgresql:postgresql'
+	// https://mvnrepository.com/artifact/postgresql/postgresql
+	// https://mvnrepository.com/artifact/org.postgresql/postgresql
+	//compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+	implementation('org.postgresql:postgresql')
+
+
 
 }

@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 class PriorityQueueObject {
-    private String key;
+    private Integer key;
     private long time;
 }
