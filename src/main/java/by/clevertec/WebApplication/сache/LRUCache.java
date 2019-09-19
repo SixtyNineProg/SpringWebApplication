@@ -14,9 +14,6 @@ public class LRUCache {
     private Hashtable<String, Optional<User>> cacheTable =  new Hashtable<>(Constants.sizeCache);
     private PriorityQueue<PriorityQueueObject> priorityQueue = new PriorityQueue<>(Constants.sizeCache, idComparator);
 
-    public LRUCache() {
-    }
-
     public void addInCache(String id, Optional<User> user){
         if (priorityQueue.size() == Constants.sizeCache){
             String removKey = priorityQueue.poll().getKey();
@@ -24,6 +21,11 @@ public class LRUCache {
         }
         priorityQueue.add(new PriorityQueueObject(id, System.currentTimeMillis()));
         cacheTable.put(id, user);
+    }
+
+    public void replaceInPriorityQueue(String id){
+        priorityQueue.remove(id);
+        priorityQueue.add(new PriorityQueueObject(id, System.currentTimeMillis()));
     }
 
     private static Comparator<PriorityQueueObject> idComparator = (o1, o2) -> toIntExact (o1.getTime() - o2.getTime());

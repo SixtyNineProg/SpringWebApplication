@@ -45,7 +45,8 @@ public class UserServiceImpl implements UserService<User> {
     @Override
     public Optional<User> getUser(String id) {
         Optional<User> cacheUser = lruCache.getCacheTable().get(id);
-        if (cacheUser.isPresent()) {
+        if (cacheUser != null) {
+            lruCache.replaceInPriorityQueue(id);
             cacheUser.ifPresent(data -> log.info(Constants.USER_RECEIVED, id, toJson(cacheUser)));
             return cacheUser;
         } else {
