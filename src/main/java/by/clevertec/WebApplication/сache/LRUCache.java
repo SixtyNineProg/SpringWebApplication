@@ -3,48 +3,46 @@ package by.clevertec.WebApplication.сache;
 import by.clevertec.WebApplication.constants.Constants;
 import by.clevertec.WebApplication.dataSets.User;
 
-import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Optional;
-import java.util.PriorityQueue;
-
-import static java.lang.Math.toIntExact;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class LRUCache {
-    private Hashtable<Integer, Optional<User>> cacheTable = new Hashtable<>(Constants.sizeCache);
-    private PriorityQueue<PriorityQueueObject> priorityQueue = new PriorityQueue<>(Constants.sizeCache, idComparator);
+    private Hashtable<Integer, Optional<User>> cacheUsers = new Hashtable<>(Constants.sizeCache);
+    private Hashtable<Integer, Long> cacheTime = new Hashtable<>(Constants.sizeCache);
 
     public void addInCache(Integer id, Optional<User> user) {
-        if (priorityQueue.size() == Constants.sizeCache) {
-            Integer removKey = priorityQueue.poll().getKey();
-            cacheTable.remove(removKey);
+        if (cacheTime.size() == Constants.sizeCache && cacheUsers.size() == Constants.sizeCache) {
+            Integer removeKey = searchMinTime();
+            cacheUsers.remove(removeKey);
+            cacheTime.remove(removeKey);
         }
-        priorityQueue.add(new PriorityQueueObject(id, System.currentTimeMillis()));
-        cacheTable.put(id, user);
+        cacheTime.put(id, System.currentTimeMillis());
+        cacheUsers.put(id, user);
     }
 
-    public void replaceInPriorityQueue(Optional<User> cacheUser) {
-        priorityQueue.remove(cacheUser);
-        priorityQueue.add(new PriorityQueueObject(cacheUser.get().getId(), System.currentTimeMillis()));
+    public void replaceInPriorityQueue(Integer id) {
+        cacheTime.remove(id);
+        cacheTime.put(id, System.currentTimeMillis());
     }
 
-    private static Comparator<PriorityQueueObject> idComparator = (o1, o2) -> toIntExact(o1.getTime() - o2.getTime());
-
-    public Hashtable<Integer, Optional<User>> getCacheTable() {
-        return cacheTable;
+    public Hashtable<Integer, Optional<User>> getCacheUsers() {
+        return cacheUsers;
     }
 
-    public void setCacheTable(Hashtable<Integer, Optional<User>> cacheTable) {
-        this.cacheTable = cacheTable;
+    private int searchMinTime() {
+        AtomicInteger minKey = new AtomicInteger();
+        AtomicLong minValue = new AtomicLong(System.currentTimeMillis());
+        cacheTime.forEach((key, value) -> {
+            if (minValue.get() > value) {
+                minKey.set(key);
+                minValue.set(value);
+            }
+        });
+        return minKey.get();
     }
 
-    public PriorityQueue getPriorityQueue() {
-        return priorityQueue;
-    }
-
-    public void setPriorityQueue(PriorityQueue<PriorityQueueObject> priorityQueue) {
-        this.priorityQueue = priorityQueue;
-    }
 }
 
 
