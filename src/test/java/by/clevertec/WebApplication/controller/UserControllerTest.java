@@ -1,5 +1,6 @@
 package by.clevertec.WebApplication.controller;
 
+import by.clevertec.WebApplication.configs.YAMLConfig;
 import by.clevertec.WebApplication.dataSets.User;
 import by.clevertec.WebApplication.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +22,6 @@ import java.util.Optional;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -36,7 +36,7 @@ public class UserControllerTest {
     private UserService<User> userService;
 
     private final User user = new User(
-            "1",
+            1,
             "Andrey",
             "Andrey@mail.ru",
             "123456789",
@@ -50,17 +50,17 @@ public class UserControllerTest {
             18);
 
     private final List<User> users = Arrays.asList(
-            new User("1",
+            new User(1,
                     "Andrey",
                     "Andrey@mail.ru",
                     "123456789",
                     14),
-            new User("2",
+            new User(2,
                     "Victor",
                     "Victor@mail.ru",
                     "777756789",
                     26),
-            new User("3",
+            new User(3,
                     "Kate",
                     "Kate@mail.ru",
                     "888856789",
@@ -73,7 +73,7 @@ public class UserControllerTest {
 
     @Test
     public void whenGetRequestThenExpectStatusOkAndContextJSON() throws Exception {
-        given(this.userService.getUser(anyString())).willReturn(java.util.Optional.of(user));
+        given(this.userService.getUser(anyInt())).willReturn(java.util.Optional.of(user));
         this.mockMvc.perform(get("/user/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
@@ -81,7 +81,7 @@ public class UserControllerTest {
 
     @Test
     public void whenGetRequestThenExpectJSONContenNameAndPassword() throws Exception {
-        given(this.userService.getUser(anyString())).willReturn(java.util.Optional.of(user));
+        given(this.userService.getUser(anyInt())).willReturn(java.util.Optional.of(user));
         this.mockMvc.perform(get("/user/1"))
                 .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.password").exists());
@@ -89,7 +89,7 @@ public class UserControllerTest {
 
     @Test
     public void whenGetRequestThenExpectStatusNotFound() throws Exception {
-        given(this.userService.getUser(anyString())).willReturn(Optional.empty());
+        given(this.userService.getUser(anyInt())).willReturn(Optional.empty());
         this.mockMvc.perform(get("/user/1"))
                 .andExpect(status().isNotFound());
     }
@@ -103,7 +103,7 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        String id = mvcResult.getResponse().getContentAsString();
+        Integer id = Integer.valueOf(mvcResult.getResponse().getContentAsString());
         assertEquals(id, user.getId());
     }
 
@@ -127,8 +127,8 @@ public class UserControllerTest {
 
     @Test
     public void whenDeleteRequestDeleteUserThenExpectStatusOkAndResponceTrue() throws Exception {
-        given(userService.getUser(anyString())).willReturn(java.util.Optional.of(user));
-        given(this.userService.deleteUser(anyString())).willReturn(true);
+        given(userService.getUser(anyInt())).willReturn(java.util.Optional.of(user));
+        given(this.userService.deleteUser(anyInt())).willReturn(true);
         MvcResult mvcResult = this.mockMvc.perform(delete("/user/1"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -139,15 +139,15 @@ public class UserControllerTest {
 
     @Test
     public void whenDeleteRequestDeleteUserInvalidIdThenExpectStatusNotFound() throws Exception {
-        given(this.userService.deleteUser(anyString())).willReturn(true);
+        given(this.userService.deleteUser(anyInt())).willReturn(true);
         this.mockMvc.perform(delete("/user/1"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void whenDeleteRequestDeleteUserWithExceptionThenExpectStatusInternalServerError() throws Exception {
-        given(userService.getUser(anyString())).willReturn(java.util.Optional.of(user));
-        given(this.userService.deleteUser(anyString())).willThrow(new ArithmeticException());
+        given(userService.getUser(anyInt())).willReturn(java.util.Optional.of(user));
+        given(this.userService.deleteUser(anyInt())).willThrow(new ArithmeticException());
         this.mockMvc.perform(delete("/user/1"))
                 .andExpect(status().is5xxServerError());
     }
@@ -224,8 +224,5 @@ public class UserControllerTest {
 
     @Test
     public void BadRequest() throws Exception {
-        given(this.userService.getUser(anyInt(), anyInt())).willThrow(new ArithmeticException());
-        this.mockMvc.perform(get("/user"))
-                .andExpect(status().is4xxClientError());
     }
 }

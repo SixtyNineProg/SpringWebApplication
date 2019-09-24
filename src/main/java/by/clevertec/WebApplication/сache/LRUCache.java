@@ -22,7 +22,7 @@ public class LRUCache {
         cacheUsers.put(id, user);
     }
 
-    public void replaceInPriorityQueue(Integer id) {
+    public void replaceTime(Integer id) {
         cacheTime.remove(id);
         cacheTime.put(id, System.currentTimeMillis());
     }
