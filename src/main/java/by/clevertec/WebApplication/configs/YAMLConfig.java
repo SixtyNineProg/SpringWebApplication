@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "cache")
 public class YAMLConfig {
-    private Boolean anabled;
+    private Boolean enabled;
     private Boolean LRU;
     private Boolean LFU;
 }

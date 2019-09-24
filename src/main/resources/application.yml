@@ -20,6 +20,6 @@ server:
   servlet.context-path: /webapplication
 
 cache:
-  anabled: true
+  enabled: true
   LRU: true
   LFU: false
