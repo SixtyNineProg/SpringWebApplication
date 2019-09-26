@@ -1,10 +1,12 @@
 package by.clevertec.WebApplication.service.impl;
 
+import by.clevertec.WebApplication.configs.CacheConfig;
 import by.clevertec.WebApplication.constants.Constants;
 import by.clevertec.WebApplication.dataSets.User;
 import by.clevertec.WebApplication.repository.UserRepository;
 import by.clevertec.WebApplication.service.UserService;
-import by.clevertec.WebApplication.сache.LRUCache;
+import by.clevertec.WebApplication.сache.Cache;
+import by.clevertec.WebApplication.сache.factory.CacheFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +21,16 @@ import java.util.Optional;
 @Slf4j
 public class UserServiceImpl implements UserService<User> {
 
+    private final CacheConfig cacheConfig;
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
-    private LRUCache lruCache = new LRUCache();
+    private Cache cache;
 
-    public UserServiceImpl(UserRepository userRepository, ObjectMapper objectMapper) {
+    public UserServiceImpl(UserRepository userRepository, ObjectMapper objectMapper, CacheConfig cacheConfig) {
         this.userRepository = userRepository;
         this.objectMapper = objectMapper;
+        this.cacheConfig = cacheConfig;
+        cache = CacheFactory.getCache(cacheConfig.getCacheType());
     }
 
     @Override
@@ -44,17 +49,21 @@ public class UserServiceImpl implements UserService<User> {
 
     @Override
     public Optional<User> getUser(Integer id) {
-        Optional<User> cacheUser = lruCache.getCacheUsers().get(id);
-        if (cacheUser != null) {
-            lruCache.replaceTime(id);
-            cacheUser.ifPresent(data -> log.info(Constants.USER_RECEIVED_CACHE, id, toJson(cacheUser)));
-            return cacheUser;
+        Optional<User> user;
+        if (cacheConfig.getEnabled()) {
+            user = cache.get(id);
+            if (!user.isPresent()){
+                user = userRepository.findById(id);
+                cache.addInCache(id, user);
+                Optional<User> finalUser1 = user;
+                user.ifPresent(data -> log.info(Constants.USER_RECEIVED, id, toJson(finalUser1)));
+            }
         } else {
-            Optional<User> user = userRepository.findById(id);
-            if (user.isPresent()) lruCache.addInCache(id, user);
-            user.ifPresent(data -> log.info(Constants.USER_RECEIVED, id, toJson(user)));
-            return user;
+            user = userRepository.findById(id);
         }
+        Optional<User> finalUser = user;
+        user.ifPresent(data -> log.info(Constants.USER_RECEIVED_CACHE, id, toJson(finalUser)));
+        return user;
     }
 
     @Override

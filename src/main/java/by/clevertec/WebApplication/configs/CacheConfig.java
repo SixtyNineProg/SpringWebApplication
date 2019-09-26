@@ -9,8 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "cache")
-public class YAMLConfig {
+public class CacheConfig {
     private Boolean enabled;
-    private Boolean LRU;
-    private Boolean LFU;
+    private String cacheType;
 }

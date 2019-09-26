@@ -21,5 +21,4 @@ server:
 
 cache:
   enabled: true
-  LRU: true
-  LFU: false
+  cacheType: LRU

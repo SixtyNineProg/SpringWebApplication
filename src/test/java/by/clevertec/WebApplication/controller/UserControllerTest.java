@@ -1,6 +1,5 @@
 package by.clevertec.WebApplication.controller;
 
-import by.clevertec.WebApplication.configs.YAMLConfig;
 import by.clevertec.WebApplication.dataSets.User;
 import by.clevertec.WebApplication.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
