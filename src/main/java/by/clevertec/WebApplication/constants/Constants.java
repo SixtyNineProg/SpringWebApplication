@@ -21,6 +21,4 @@ public class Constants {
     public static final String PAGENUMBER_VALUE = "0";
 
     public static final String USER_MISSING = "User is missing";
-
-    public static final int sizeCache = 2;
 }

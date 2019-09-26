@@ -12,4 +12,5 @@ import org.springframework.context.annotation.Configuration;
 public class CacheConfig {
     private Boolean enabled;
     private String cacheType;
+    private int sizeCache;
 }

@@ -14,13 +14,22 @@ import java.util.concurrent.atomic.AtomicLong;
 @Data
 @Slf4j
 public class LRUCache implements Cache {
-    private Hashtable<Integer, User> cacheUsers = new Hashtable<>(Constants.sizeCache);
-    private Hashtable<Integer, Long> cacheTime = new Hashtable<>(Constants.sizeCache);
+
+    private int sizeCache = 10;
+    private Hashtable<Integer, User> cacheUsers = new Hashtable<>(sizeCache);
+    private Hashtable<Integer, Long> cacheTime = new Hashtable<>(sizeCache);
+
+    public LRUCache() {
+    }
+
+    public LRUCache(int sizeCache) {
+        this.sizeCache = sizeCache;
+    }
 
     @Override
     public void addInCache(Integer id, Optional<User> user) {
         if (user.isPresent()) {
-            if (cacheTime.size() == Constants.sizeCache && cacheUsers.size() == Constants.sizeCache) {
+            if (cacheTime.size() == sizeCache && cacheUsers.size() == sizeCache) {
                 Integer removeKey = searchMinTime();
                 cacheUsers.remove(removeKey);
                 cacheTime.remove(removeKey);
