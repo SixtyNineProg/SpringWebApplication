@@ -220,8 +220,4 @@ public class UserControllerTest {
         this.mockMvc.perform(get("/user"))
                 .andExpect(status().is4xxClientError());
     }
-
-    @Test
-    public void BadRequest() throws Exception {
-    }
 }
