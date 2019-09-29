@@ -1,51 +1,51 @@
 package by.clevertec.WebApplication.сache.impl;
 
 import by.clevertec.WebApplication.configs.CacheConfig;
+import by.clevertec.WebApplication.constants.Constants;
 import by.clevertec.WebApplication.dataSets.User;
 import by.clevertec.WebApplication.сache.Cache;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
+@Data
+@Slf4j
 public class LFUCache implements Cache {
     private int sizeCache = 10;
     private Hashtable<Integer, User> cacheUsers = new Hashtable<>(sizeCache);
-    private HashMap<Integer, Long> cacheNumUses = new HashMap<>(sizeCache);
+    private HashMap<Integer, Integer> cacheNumUses = new HashMap<>(sizeCache);
 
     public LFUCache(){
-        CounterReset counterReset = new CounterReset(cacheNumUses);
-        counterReset.start();
+        LFUReset LFUReset = new LFUReset(cacheNumUses);
+        LFUReset.start();
     }
 
     @Override
     public void addInCache(Integer id, Optional<User> user) {
-        /*
         if (user.isPresent()) {
             if (cacheNumUses.size() == sizeCache && cacheUsers.size() == sizeCache) {
                 Integer removeKey = searchMinNumUses();
                 cacheUsers.remove(removeKey);
-                cacheTime.remove(removeKey);
+                cacheNumUses.remove(removeKey);
             }
-            cacheTime.put(id, System.currentTimeMillis());
+            cacheNumUses.put(id, 0);
             cacheUsers.put(id, user.get());
         } else {
             log.info(Constants.USER_MISSING);
             throw new NullPointerException(Constants.USER_MISSING);
         }
-
-         */
-    }
-
-    private Integer searchMinNumUses() {
-        return null;
     }
 
     @Override
     public Optional<User> get(Integer id) {
         User user = cacheUsers.get(id);
         if (user != null){
-            //replaceTime(id);
+            cacheNumUses.put(id, cacheNumUses.get(id) + 1);
             return Optional.of(user);
         } else {
             return Optional.empty();
@@ -58,11 +58,11 @@ public class LFUCache implements Cache {
         cacheNumUses.remove(id);
     }
 
-    static class CounterReset extends Thread{
-        private HashMap<Integer, Long> hashMap;
+    static class LFUReset extends Thread{
+        private HashMap<Integer, Integer> hashMap;
         private CacheConfig cacheConfig = new CacheConfig();
 
-        CounterReset(HashMap<Integer, Long> cacheNumUses){
+        LFUReset(HashMap<Integer, Integer> cacheNumUses){
             this.hashMap = cacheNumUses;
         }
 
@@ -71,12 +71,24 @@ public class LFUCache implements Cache {
             try {
                 while (true) {
                     Thread.sleep(cacheConfig.getCacheResetFrequency());
-                    hashMap.replaceAll((k, v) -> (long) 0);
+                    hashMap.replaceAll((k, v) -> 0);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private Integer searchMinNumUses() {
+        AtomicInteger minKey = new AtomicInteger();
+        AtomicLong minValue = new AtomicLong(cacheNumUses.entrySet().iterator().next().getValue());
+        cacheNumUses.forEach((key, value) -> {
+            if (minValue.get() > value) {
+                minKey.set(key);
+                minValue.set(value);
+            }
+        });
+        return minKey.get();
     }
 }
 
