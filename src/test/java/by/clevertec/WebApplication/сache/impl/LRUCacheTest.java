@@ -40,7 +40,7 @@ public class LRUCacheTest {
         final int size = lruCache.getCacheUsers().size();
         assertThat(size, is(5));
     }
-
+/*
     @Test
     public void whenAddInCacheThenLessUsedItemWillBeDeleted() {
         init();
@@ -48,7 +48,7 @@ public class LRUCacheTest {
         User user = lruCache.getCacheUsers().get(1);
         assertNull(user);
     }
-
+*/
     @Test(expected = NullPointerException.class)
     public void whenAddInCacheNullUserThenNullPointerException() {
         lruCache.addInCache(1, Optional.empty());

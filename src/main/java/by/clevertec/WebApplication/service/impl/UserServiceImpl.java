@@ -36,12 +36,18 @@ public class UserServiceImpl implements UserService<User> {
     @Override
     public Integer saveUser(User user) {
         userRepository.save(user);
+        if (cacheConfig.getEnabled()) {
+            cache.addInCache(user.getId(), Optional.of(user));
+        }
         log.info(Constants.USER_SAVED, toJson(user));
         return user.getId();
     }
 
     @Override
     public Boolean deleteUser(Integer id) {
+        if (cacheConfig.getEnabled()){
+            cache.delete(id);
+        }
         userRepository.deleteById(id);
         log.info(Constants.USER_DELETED, id);
         return true;
@@ -74,10 +80,13 @@ public class UserServiceImpl implements UserService<User> {
     }
 
     @Override
-    public Boolean updateUser(User cacheUser) {
-        userRepository.save(cacheUser);
-        Optional<User> optionalUser = Optional.ofNullable(cacheUser);
-        optionalUser.ifPresent(data -> log.info(Constants.USER_UPDATED, cacheUser.getId(), toJson(cacheUser)));
+    public Boolean updateUser(User user) {
+        userRepository.save(user);
+        if (cacheConfig.getEnabled()) {
+            cache.addInCache(user.getId(), Optional.of(user));
+        }
+        Optional<User> optionalUser = Optional.of(user);
+        optionalUser.ifPresent(data -> log.info(Constants.USER_UPDATED, user.getId(), toJson(user)));
         return true;
     }
 

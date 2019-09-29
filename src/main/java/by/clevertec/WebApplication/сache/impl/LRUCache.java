@@ -53,6 +53,12 @@ public class LRUCache implements Cache {
         }
     }
 
+    @Override
+    public void delete(Integer id) {
+        cacheUsers.remove(id);
+        cacheTime.remove(id);
+    }
+
     public void replaceTime(Integer id) {
         cacheTime.remove(id);
         cacheTime.put(id, System.currentTimeMillis());
