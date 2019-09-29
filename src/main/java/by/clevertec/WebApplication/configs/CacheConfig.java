@@ -13,4 +13,5 @@ public class CacheConfig {
     private Boolean enabled;
     private String cacheType;
     private int sizeCache;
+    private long cacheResetFrequency;
 }
