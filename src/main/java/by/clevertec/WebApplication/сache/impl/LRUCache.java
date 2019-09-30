@@ -65,7 +65,7 @@ public class LRUCache implements Cache {
         cacheTime.clear();
     }
 
-    public void replaceTime(Integer id) {
+    private void replaceTime(Integer id) {
         cacheTime.remove(id);
         cacheTime.put(id, System.currentTimeMillis());
     }
