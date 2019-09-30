@@ -25,6 +25,10 @@ public class LFUCache implements Cache {
         LFUReset.start();
     }
 
+    public LFUCache(int sizeCache) {
+        this.sizeCache = sizeCache;
+    }
+
     @Override
     public void addInCache(Integer id, Optional<User> user) {
         if (user.isPresent()) {
@@ -56,6 +60,17 @@ public class LFUCache implements Cache {
     public void delete(Integer id) {
         cacheUsers.remove(id);
         cacheNumUses.remove(id);
+    }
+
+    @Override
+    public void clean() {
+        cacheNumUses.clear();
+        cacheUsers.clear();
+    }
+
+    @Override
+    public int size() {
+        return cacheUsers.size();
     }
 
     static class LFUReset extends Thread{

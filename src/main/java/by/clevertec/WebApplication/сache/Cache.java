@@ -8,4 +8,6 @@ public interface Cache {
     void addInCache(Integer id, Optional<User> user);
     Optional<User> get(Integer id);
     void delete(Integer id);
+    void clean();
+    int size();
 }

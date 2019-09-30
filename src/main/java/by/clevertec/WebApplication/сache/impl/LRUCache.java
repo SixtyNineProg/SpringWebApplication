@@ -59,6 +59,12 @@ public class LRUCache implements Cache {
         cacheTime.remove(id);
     }
 
+    @Override
+    public void clean() {
+        cacheUsers.clear();
+        cacheTime.clear();
+    }
+
     public void replaceTime(Integer id) {
         cacheTime.remove(id);
         cacheTime.put(id, System.currentTimeMillis());
@@ -66,7 +72,7 @@ public class LRUCache implements Cache {
 
     private int searchMinTime() {
         AtomicInteger minKey = new AtomicInteger();
-        AtomicLong minValue = new AtomicLong(System.currentTimeMillis());
+        AtomicLong minValue = new AtomicLong(cacheTime.entrySet().iterator().next().getValue());
         cacheTime.forEach((key, value) -> {
             if (minValue.get() > value) {
                 minKey.set(key);
@@ -74,6 +80,11 @@ public class LRUCache implements Cache {
             }
         });
         return minKey.get();
+    }
+
+    @Override
+    public int size(){
+        return cacheUsers.size();
     }
 }
 
