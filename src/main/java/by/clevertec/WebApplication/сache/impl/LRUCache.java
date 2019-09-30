@@ -71,7 +71,7 @@ public class LRUCache implements Cache {
     }
 
     private int searchMinTime() {
-        AtomicInteger minKey = new AtomicInteger();
+        AtomicInteger minKey = new AtomicInteger(cacheTime.entrySet().iterator().next().getKey());
         AtomicLong minValue = new AtomicLong(cacheTime.entrySet().iterator().next().getValue());
         cacheTime.forEach((key, value) -> {
             if (minValue.get() > value) {

@@ -41,22 +41,28 @@ public class LRUCacheTest {
         final int size = lruCache.size();
         assertThat(size, is(5));
     }
-    /*
+
     @Test
     public void whenAddInCacheThenLessUsedItemWillBeDeleted() {
         LRUCache lruCache = new LRUCache(5);
         lruCache.setSizeCache(5);
         lruCache.clean();
         lruCache.addInCache(user1.getId(), Optional.of(user1));
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         lruCache.addInCache(user2.getId(), Optional.of(user2));
         lruCache.addInCache(user3.getId(), Optional.of(user3));
         lruCache.addInCache(user4.getId(), Optional.of(user4));
         lruCache.addInCache(user5.getId(), Optional.of(user5));
         lruCache.addInCache(6, Optional.of(new User(6, "Alla", "Alla@mail.ru", "12345", 18)));
+        System.out.println(lruCache.getCacheUsers());
         User user = lruCache.getCacheUsers().get(1);
         assertNull(user);
     }
-    */
+
     @Test(expected = NullPointerException.class)
     public void whenAddInCacheNullUserThenNullPointerException() {
         lruCache.addInCache(1, Optional.empty());
