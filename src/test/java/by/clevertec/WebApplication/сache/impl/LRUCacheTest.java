@@ -38,7 +38,7 @@ public class LRUCacheTest {
     public void whenAddInCacheThenSizeCacheNotIncrement() {
         init();
         lruCache.addInCache(1, Optional.of(user1));
-        final int size = lruCache.size();
+        final int size = lruCache.getSizeCache();
         assertThat(size, is(5));
     }
 

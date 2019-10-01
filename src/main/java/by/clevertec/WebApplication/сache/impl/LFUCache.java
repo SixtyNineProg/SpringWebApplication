@@ -95,7 +95,7 @@ public class LFUCache implements Cache {
     }
 
     private Integer searchMinNumUses() {
-        AtomicInteger minKey = new AtomicInteger();
+        AtomicInteger minKey = new AtomicInteger(cacheNumUses.entrySet().iterator().next().getValue());
         AtomicLong minValue = new AtomicLong(cacheNumUses.entrySet().iterator().next().getValue());
         cacheNumUses.forEach((key, value) -> {
             if (minValue.get() > value) {

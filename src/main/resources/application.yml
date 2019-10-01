@@ -19,6 +19,7 @@ server:
   port: 9000
   servlet.context-path: /webapplication
 
+
 cache:
   enabled: true
   cacheType: LRU
