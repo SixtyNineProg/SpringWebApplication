@@ -23,5 +23,5 @@ server:
 cache:
   enabled: true
   cacheType: LRU
-  sizeCache: 2 #default 10
+  capacityCache: 2 #default 10
   cacheResetFrequency: 300000

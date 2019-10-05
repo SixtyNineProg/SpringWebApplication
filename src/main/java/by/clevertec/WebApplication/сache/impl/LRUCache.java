@@ -3,7 +3,6 @@ package by.clevertec.WebApplication.сache.impl;
 import by.clevertec.WebApplication.constants.Constants;
 import by.clevertec.WebApplication.dataSets.User;
 import by.clevertec.WebApplication.сache.Cache;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Hashtable;
@@ -11,25 +10,24 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-@Data
 @Slf4j
 public class LRUCache implements Cache {
 
-    private int sizeCache = 10;
-    private Hashtable<Integer, User> cacheUsers = new Hashtable<>(sizeCache);
-    private Hashtable<Integer, Long> cacheTime = new Hashtable<>(sizeCache);
+    private int capacityCache = 10;
+    private Hashtable<Integer, User> cacheUsers = new Hashtable<>(capacityCache);
+    private Hashtable<Integer, Long> cacheTime = new Hashtable<>(capacityCache);
 
     public LRUCache() {
     }
 
-    public LRUCache(int sizeCache) {
-        this.sizeCache = sizeCache;
+    public LRUCache(int capacityCache) {
+        this.capacityCache = capacityCache;
     }
 
     @Override
     public void addInCache(Integer id, Optional<User> user) {
         if (user.isPresent()) {
-            if (cacheTime.size() == sizeCache && cacheUsers.size() == sizeCache) {
+            if (cacheTime.size() == capacityCache && cacheUsers.size() == capacityCache && cacheUsers.get(id) == null) {
                 Integer removeKey = searchMinTime();
                 cacheUsers.remove(removeKey);
                 cacheTime.remove(removeKey);

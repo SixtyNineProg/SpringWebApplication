@@ -4,7 +4,6 @@ import by.clevertec.WebApplication.configs.CacheConfig;
 import by.clevertec.WebApplication.constants.Constants;
 import by.clevertec.WebApplication.dataSets.User;
 import by.clevertec.WebApplication.сache.Cache;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -13,26 +12,25 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-@Data
 @Slf4j
 public class LFUCache implements Cache {
-    private int sizeCache = 10;
-    private Hashtable<Integer, User> cacheUsers = new Hashtable<>(sizeCache);
-    private HashMap<Integer, Integer> cacheNumUses = new HashMap<>(sizeCache);
+    private int capacityCache = 10;
+    private Hashtable<Integer, User> cacheUsers = new Hashtable<>(capacityCache);
+    private HashMap<Integer, Integer> cacheNumUses = new HashMap<>(capacityCache);
 
     public LFUCache(){
         LFUReset LFUReset = new LFUReset(cacheNumUses);
         LFUReset.start();
     }
 
-    public LFUCache(int sizeCache) {
-        this.sizeCache = sizeCache;
+    public LFUCache(int capacityCache) {
+        this.capacityCache = capacityCache;
     }
 
     @Override
-    public void addInCache(Integer id, Optional<User> user) {
+    public synchronized void addInCache(Integer id, Optional<User> user) {
         if (user.isPresent()) {
-            if (cacheNumUses.size() == sizeCache && cacheUsers.size() == sizeCache) {
+            if (cacheNumUses.size() == capacityCache && cacheUsers.size() == capacityCache) {
                 Integer removeKey = searchMinNumUses();
                 cacheUsers.remove(removeKey);
                 cacheNumUses.remove(removeKey);
@@ -46,7 +44,7 @@ public class LFUCache implements Cache {
     }
 
     @Override
-    public Optional<User> get(Integer id) {
+    public synchronized Optional<User> get(Integer id) {
         User user = cacheUsers.get(id);
         if (user != null){
             cacheNumUses.put(id, cacheNumUses.get(id) + 1);
@@ -57,13 +55,13 @@ public class LFUCache implements Cache {
     }
 
     @Override
-    public void delete(Integer id) {
+    public synchronized void delete(Integer id) {
         cacheUsers.remove(id);
         cacheNumUses.remove(id);
     }
 
     @Override
-    public void clean() {
+    public synchronized void clean() {
         cacheNumUses.clear();
         cacheUsers.clear();
     }
@@ -95,7 +93,7 @@ public class LFUCache implements Cache {
     }
 
     private Integer searchMinNumUses() {
-        AtomicInteger minKey = new AtomicInteger(cacheNumUses.entrySet().iterator().next().getValue());
+        AtomicInteger minKey = new AtomicInteger(cacheNumUses.entrySet().iterator().next().getKey());
         AtomicLong minValue = new AtomicLong(cacheNumUses.entrySet().iterator().next().getValue());
         cacheNumUses.forEach((key, value) -> {
             if (minValue.get() > value) {
