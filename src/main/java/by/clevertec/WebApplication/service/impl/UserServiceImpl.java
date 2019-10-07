@@ -2,7 +2,7 @@ package by.clevertec.WebApplication.service.impl;
 
 import by.clevertec.WebApplication.configs.CacheConfig;
 import by.clevertec.WebApplication.constants.Constants;
-import by.clevertec.WebApplication.dataSets.User;
+import by.clevertec.WebApplication.datasets.User;
 import by.clevertec.WebApplication.repository.UserRepository;
 import by.clevertec.WebApplication.service.UserService;
 import by.clevertec.WebApplication.сache.Cache;

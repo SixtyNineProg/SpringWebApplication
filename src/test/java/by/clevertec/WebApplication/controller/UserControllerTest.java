@@ -1,6 +1,6 @@
 package by.clevertec.WebApplication.controller;
 
-import by.clevertec.WebApplication.dataSets.User;
+import by.clevertec.WebApplication.datasets.User;
 import by.clevertec.WebApplication.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;

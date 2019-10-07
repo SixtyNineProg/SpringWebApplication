@@ -1,7 +1,7 @@
 package by.clevertec.WebApplication.сache.impl;
 
 import by.clevertec.WebApplication.constants.Constants;
-import by.clevertec.WebApplication.dataSets.User;
+import by.clevertec.WebApplication.datasets.User;
 import by.clevertec.WebApplication.сache.Cache;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package by.clevertec.WebApplication.dataSets;
+package by.clevertec.WebApplication.datasets;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;

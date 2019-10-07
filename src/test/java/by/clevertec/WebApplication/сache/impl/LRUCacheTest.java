@@ -1,6 +1,6 @@
 package by.clevertec.WebApplication.сache.impl;
 
-import by.clevertec.WebApplication.dataSets.User;
+import by.clevertec.WebApplication.datasets.User;
 import org.junit.Test;
 
 import java.util.Optional;

@@ -1,7 +1,7 @@
 package by.clevertec.WebApplication.controller;
 
 import by.clevertec.WebApplication.constants.Constants;
-import by.clevertec.WebApplication.dataSets.User;
+import by.clevertec.WebApplication.datasets.User;
 import by.clevertec.WebApplication.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
