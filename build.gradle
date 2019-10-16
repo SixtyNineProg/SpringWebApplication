@@ -1,6 +1,19 @@
 plugins {
 	id 'org.springframework.boot' version '2.1.5.RELEASE'
 	id 'java'
+	id 'war'
+	id 'application'
+}
+
+jar {
+	enabled = true
+}
+
+bootJar {
+	manifest {
+		attributes 'Start-Class': 'by.clevertec.WebApplication.WebApplication'
+	}
+	launchScript()
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -8,6 +21,7 @@ apply plugin: 'io.spring.dependency-management'
 group = 'by.clevertec'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
+mainClassName = "by.clevertec.WebApplication.WebApplication"
 
 configurations {
 	developmentOnly
@@ -32,14 +46,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	//implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	//implementation 'org.postgresql:postgresql'
-	// https://mvnrepository.com/artifact/postgresql/postgresql
-	// https://mvnrepository.com/artifact/org.postgresql/postgresql
-	//compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
 	implementation('org.postgresql:postgresql')
 
-
-
+	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }

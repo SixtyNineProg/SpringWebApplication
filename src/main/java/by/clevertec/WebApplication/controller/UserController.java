@@ -8,7 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RestController
 @RequestMapping(Constants.USER)
@@ -18,6 +21,13 @@ public class UserController {
 
     public UserController(UserService<User> userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/hello")
+    public Collection<String> sayHello() {
+        return IntStream.range(0, 10)
+                .mapToObj(i -> "Hello number " + i)
+                .collect(Collectors.toList());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
