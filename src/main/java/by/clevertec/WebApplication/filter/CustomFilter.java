@@ -14,7 +14,7 @@ import java.io.IOException;
 @WebFilter("WebApplication/user")
 public class CustomFilter implements Filter {
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         log.info("Initiating Custom filter");
     }
 
@@ -22,8 +22,8 @@ public class CustomFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        log.info(httpRequest.getRequestURI());
-        log.info(String.valueOf(httpRequest.getLocalPort()));
+        //log.info(httpRequest.getRequestURI());
+        //log.info(String.valueOf(httpRequest.getLocalPort()));
         chain.doFilter(request, response);
     }
 

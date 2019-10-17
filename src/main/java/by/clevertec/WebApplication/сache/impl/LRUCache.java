@@ -43,7 +43,7 @@ public class LRUCache implements Cache {
     @Override
     public Optional<User> get(Integer id) {
         User user = cacheUsers.get(id);
-        if (user != null){
+        if (user != null) {
             replaceTime(id);
             return Optional.of(user);
         } else {
@@ -81,7 +81,7 @@ public class LRUCache implements Cache {
     }
 
     @Override
-    public int size(){
+    public int size() {
         return cacheUsers.size();
     }
 }

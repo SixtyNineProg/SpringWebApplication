@@ -11,6 +11,7 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
+        default_schema: public
         jdbc:
           lob:
             non_contextual_creation: true
@@ -20,7 +21,7 @@ server:
   servlet.context-path: /webapplication
 
 cache:
-  enabled: true
+  enabled: false
   cacheType: LRU
   capacityCache: 2 #default 10
-  cacheResetFrequency: 300000
+  cacheResetFrequency: 300000 #ms

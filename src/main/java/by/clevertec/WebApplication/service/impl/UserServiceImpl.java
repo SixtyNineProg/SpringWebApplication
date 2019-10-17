@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService<User> {
 
     @Override
     public Boolean deleteUser(Integer id) {
-        if (cacheConfig.getEnabled()){
+        if (cacheConfig.getEnabled()) {
             cache.delete(id);
         }
         userRepository.deleteById(id);
@@ -56,9 +56,9 @@ public class UserServiceImpl implements UserService<User> {
     @Override
     public Optional<User> getUser(Integer id) {
         Optional<User> user;
-        if (cacheConfig.getEnabled()) {
+        if (cacheConfig.getEnabled()) {//fix, if user = null internal server error
             user = cache.get(id);
-            if (!user.isPresent()){
+            if (!user.isPresent()) {
                 user = userRepository.findById(id);
                 cache.addInCache(id, user);
                 Optional<User> finalUser1 = user;
